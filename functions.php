@@ -17,7 +17,7 @@ function getCities() {
     echo "asdasda";
 }
 
-function getCity(){
+function getAddress(){
     $sql = "SELECT * FROM cities WHERE id=:id";
     try{
         $db = getDB();
@@ -29,21 +29,21 @@ function getCity(){
     }
 }
 
-//http://ebazar/cities/insertCity
-function insertCity(){
+//http://ebazar/cities/insertAddress
+function insertAddress(){
     $request = \Slim\Slim::getInstance()->request();
-	$city = json_decode($request->getBody());
+	$address = json_decode($request->getBody());
     $sql = "INSERT INTO cities (name, parent_id) VALEUS(:name, :parent_id)";
     try{
         $db = getDB();
 		$stmt = $db->prepare($sql);  
-        $stmt->bindParam("name", $city->name);
-		$stmt->bindParam("parent_id", $city->parent_id);
+        $stmt->bindParam("name", $address->name);
+		$stmt->bindParam("parent_id", $address->parent_id);
         $stmt->execute();
-        $city->id = $db->lastInsertId();
+        $address->id = $db->lastInsertId();
         $db = null;
-		//$city_id= $city->id;
-		//getUserUpdate($city_id);
+		//$Address_id= $Address->id;
+		//getUserUpdate($Address_id);
     }catch(PDOException $e){
         echo '{"error":{"text":'. $e->getMessage() .'}}'; 
     }

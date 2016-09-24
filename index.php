@@ -1,11 +1,58 @@
 <?php
 
-require_once '/include/DbHandler.php';
+require_once 'include/DbHandler.php';
 require 'Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim();
+/*----------------------USERS------------------------------------------*/
+$app->post('/login', function() use($app){
+    
+    verifyRequiredParams(array('email', 'password'));
+    
+    $email = $app->request->params('email');
+    $password = $app->request->params('password');
 
+    $response = array();
+
+    $db = new DbHandler();
+    $user = $db->getUserByEmailPassword();
+    if($user!=null){
+        $response["error"]=false;
+        $response["user"]=$user;
+    }else{
+        $response["error"]=true;
+        $response["message"]="Login failed. Incorrect credentials.";
+    }
+});
+
+$app->post('/register', function() use($app){
+    verifyRequiredParams(array('email', 'password'));
+    
+    $response = array();
+    
+    $email = $app->request()->params("email");
+    $password = $app->request->params('password');
+
+    //validateEmail($email);
+
+    $db = new DbHandler();
+    $res = $db->createUser($email,$password);
+   
+    if ($res == USER_CREATED_SUCCESSFULLY) {
+                $response["error"] = false;
+                $response["message"] = "You are successfully registered";
+            } else if ($res == USER_CREATE_FAILED) {
+                $response["error"] = true;
+                $response["message"] = "Oops! An error occurred while registering";
+            } else if ($res == USER_ALREADY_EXISTED) {
+                $response["error"] = true;
+                $response["message"] = "Sorry, this email already existed";
+            }
+            // echo json response
+            echoResponse(201, $response);
+});
+/*----------------------ADDRESSES------------------------------------------*/
 $app->get('/addresses', function(){
     $response = array();
     $db = new DbHandler();
@@ -24,7 +71,7 @@ $app->get('/addresses', function(){
     echoResponse(200, $response);
 });
 
-$app->post('/addresses', function(){
+$app->post('/addresses', function() use($app){
     verifyRequiredParams(array('address'));
     $response = array();
     $address = $app->request->post('address');
@@ -55,7 +102,17 @@ $app->delete('/addresses/:id', function($address_id) use($app){
     }
     echoResponse(200, $response);
 });
-
+/*----------------------MARKETS------------------------------------------*/
+$app->post('/markets', function() use($app){
+    verifyRequiredParams(array('address'));
+    $response = array();
+    
+});
+/*----------------------ADDRESSES------------------------------------------*/
+/*----------------------ADDRESSES------------------------------------------*/
+/*----------------------ADDRESSES------------------------------------------*/
+/*----------------------ADDRESSES------------------------------------------*/
+/*----------------------ADDRESSES------------------------------------------*/
 
 /**
  * Verifying required params posted or not

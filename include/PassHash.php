@@ -1,5 +1,20 @@
 <?php
 
+
+class PassHash {
+
+    // this will be used to generate a hash
+    public static function hash($password) {
+        return $password;
+    }
+
+    // this will be used to compare a password against a hash
+    public static function check_password($hash, $password) {
+        return ($password==$hash);
+    }
+
+}
+/*
 class PassHash {
 
     // blowfish
@@ -14,7 +29,7 @@ class PassHash {
 
     // this will be used to generate a hash
     public static function hash($password) {
-
+        
         return crypt($password, self::$algo .
                 self::$cost .
                 '$' . self::unique_salt());
@@ -26,7 +41,6 @@ class PassHash {
         $new_hash = crypt($password, $full_salt);
         return ($hash == $new_hash);
     }
-
-}
+}*/
 
 ?>
