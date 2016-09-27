@@ -121,6 +121,30 @@ function createMarket($market){
     }
 }
 /*----------------------ADDRESSES------------------------------------------*/
+function createClassifier($name){
+    $sql = "INSERT INTO classifiers(name) VALUES(:name)";
+    try{
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam("name",$name);
+        $stmt->execute();
+        return true;
+    }catch(PDOException $ex){
+        return $ex;
+    }         
+}
+
+function createClassifierValue($name,$classifier_id){
+    $sql = "INSERT INTO classifier_values(name,classifier_id) VALUES(:name,:classifier_id)";
+    try{
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam("name",$name);
+        $stmt->bindParam("classifier_id",$classifier_id);
+        $stmt->execute();
+        return true;
+    }catch(PDOException $ex){
+        return $ex;
+    }         
+}
 /*----------------------ADDRESSES------------------------------------------*/
 /*----------------------ADDRESSES------------------------------------------*/
 /*----------------------ADDRESSES------------------------------------------*/

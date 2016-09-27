@@ -9,5 +9,12 @@ $mng = new DbHandler();
 //echo $mng->createUser("ereke_enu@mail.ru","12345");
 //$user = $mng->getUserByPassword("ereke_enu@mail.ru","12345");
 //var_dump($user);
+//$mng->createClassifier("Контакты Торгого места");
+/*echo $mng->createClassifierValue("Телефон",2);
+echo $mng->createClassifierValue("Веб-сайт",2);
+echo $mng->createClassifierValue("Электронная почта",2);
+*/
+
+
 
 ?>
