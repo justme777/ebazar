@@ -103,7 +103,6 @@ class DbHandler{
         }
     }
 
-
 /*----------------------MARKETS------------------------------------------*/
 function createMarket($market){
     $sql="INSERT INTO markets(name,address_id,create_date,user_id,type_id) ".
@@ -120,7 +119,19 @@ function createMarket($market){
         return $ex;
     }
 }
-/*----------------------ADDRESSES------------------------------------------*/
+
+function getMarketTypes(){
+    $sql = "SELECT * FROM classifier_values WHERE classifier_id=1";
+    try{
+        $stmt = $this->conn->query($sql);  
+        $addresses = $stmt->fetchAll(PDO::FETCH_OBJ);
+        return $addresses;
+    }catch(PDOException $e){
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+        return $e;
+    }    
+}
+/*----------------------Classifier------------------------------------------*/
 function createClassifier($name){
     $sql = "INSERT INTO classifiers(name) VALUES(:name)";
     try{

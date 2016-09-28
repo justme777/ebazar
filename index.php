@@ -1,10 +1,20 @@
 <?php
+header("Access-Control-Allow-Origin: http://ebazar-web:8181");
+
+header("Access-Control-Allow-Credentials: true");
+
+header("Access-Control-Expose-Headers: Access-Control-Allow-Origin,Access-Control-Allow-Credentials");
+
+header('Access-Control-Allow-Origin: *');
+
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
 require_once 'include/DbHandler.php';
 require 'Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim();
+
 /*----------------------USERS------------------------------------------*/
 $app->post('/login', function() use($app){
     
@@ -106,7 +116,25 @@ $app->delete('/addresses/:id', function($address_id) use($app){
 $app->post('/markets', function() use($app){
     verifyRequiredParams(array('address'));
     $response = array();
+});
+
+$app->get('/markettypes', function(){
+    $response = array();
+    $db = new DbHandler();
+
+    $result = $db->getMarketTypes();
     
+    $response["error"]=false;
+    $response["markettypes"] = array();
+
+    foreach($result as $address){
+        $tmp = array();
+        $tmp["id"] = $address->id;
+        $tmp["name"] = $address->name;
+        $tmp["classifier_id"] = $address->classifier_id;
+        array_push($response["markettypes"],$tmp);
+    }
+    echoResponse(200, $response);
 });
 /*----------------------ADDRESSES------------------------------------------*/
 /*----------------------ADDRESSES------------------------------------------*/
