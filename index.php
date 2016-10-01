@@ -1,13 +1,11 @@
 <?php
 header("Access-Control-Allow-Origin: http://ebazar-web:8181");
-
 header("Access-Control-Allow-Credentials: true");
-
 header("Access-Control-Expose-Headers: Access-Control-Allow-Origin,Access-Control-Allow-Credentials");
-
 header('Access-Control-Allow-Origin: *');
-
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header("Content-Type : application/json;charset=utf-8");
+//header('Content-type: text/plain; charset=utf-8');
 
 require_once 'include/DbHandler.php';
 require 'Slim/Slim.php';
@@ -34,6 +32,7 @@ $app->post('/login', function() use($app){
         $response["error"]=true;
         $response["message"]="Login failed. Incorrect credentials.";
     }
+    echoResponse(201, $response);
 });
 
 $app->post('/register', function() use($app){
@@ -84,7 +83,7 @@ $app->get('/addresses', function(){
 $app->post('/addresses', function() use($app){
     verifyRequiredParams(array('address'));
     $response = array();
-    $address = $app->request->post('address');
+    $address = $app->request->params('address');
     $db = new DbHandler();
     $address_id = $db->createaddress($address);
     if ($address_id != NULL) {
@@ -114,8 +113,20 @@ $app->delete('/addresses/:id', function($address_id) use($app){
 });
 /*----------------------MARKETS------------------------------------------*/
 $app->post('/markets', function() use($app){
-    verifyRequiredParams(array('address'));
+    //verifyRequiredParams(array('market'));
     $response = array();
+    $market = json_decode($app->request->params('data'));
+    $db = new DbHandler();
+    $res = $db->createMarket($market);
+    if ($res) {
+        $response["error"] = false;
+        $response["message"] = "Market created successfully";
+        echoResponse(200, $response);
+    } else {
+        $response["error"] = true;
+        $response["message"] = "Market failed to create. Please try again!";
+        echoResponse(201, $response);
+    }
 });
 
 $app->get('/markettypes', function(){
@@ -142,6 +153,24 @@ $app->get('/markettypes', function(){
 /*----------------------ADDRESSES------------------------------------------*/
 /*----------------------ADDRESSES------------------------------------------*/
 
+
+
+$app->post('/test', function() use($app){
+    //verifyRequiredParams(array('test'));
+    
+    $response = array();
+    $res = json_decode($app->request->params('data'));
+    $response['sendParam']=$res->name;
+    if ($res) {
+        $response["error"] = false;
+        $response["message"] = "Market created successfully";
+
+    } else {
+        $response["error"] = true;
+        $response["message"] = "Market failed to create. Please try again!";
+    }
+    echoResponse(201, $response);
+});
 /**
  * Verifying required params posted or not
  */
@@ -199,7 +228,6 @@ function echoResponse($status_code, $response) {
 
     // setting response content type to json
     $app->contentType('application/json');
-
     echo json_encode($response);
 }
 

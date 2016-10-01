@@ -1,5 +1,4 @@
 <?php
-
 class DbHandler{
 
     private $conn;
@@ -104,17 +103,19 @@ class DbHandler{
     }
 
 /*----------------------MARKETS------------------------------------------*/
+
 function createMarket($market){
     $sql="INSERT INTO markets(name,address_id,create_date,user_id,type_id) ".
     "VALUES(:name,:address_id,NOW(),:user_id,:type_id)";
     try{
+        var_dump($market);
         $stmt=$this->conn->prepare($sql);
-        $stmt->bindParam("name","$name");
-        $stmt->bindParam("address_id","$address_id");
-        $stmt->bindParam("user_id","$user_id");
-        $stmt->bindParam("type_id","$type_id");
+        $stmt->bindParam("name",$market->name);
+        $stmt->bindParam("address_id",$market->address_id);
+        $stmt->bindParam("user_id",$market->user_id);
+        $stmt->bindParam("type_id",$market->type_id);
         $stmt->execute();
-        $last_id = $this->conn->lastInsertId();
+        return true;
     }catch(PDOException $ex){
         return $ex;
     }

@@ -18,4 +18,10 @@ echo $mng->createClassifierValue("Электронная почта",2);
 $arr =$mng->getMarketTypes();
 var_dump($arr);
 */
+
+$market->name="test";
+$market->type_id="1";
+$market->address_id="1";
+$market->user_id=1;
+echo $mng->createMarket($market);
 ?>
